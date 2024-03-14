@@ -1,0 +1,66 @@
+unit uEntity.Tarefa;
+
+interface
+
+   uses System.Generics.Collections,
+        System.SysUtils;
+
+  type
+    TEntityTarefa = class
+      private
+        FID                  : Integer;
+        FIDUsuario           : integer;
+        FDescricao           : string;
+        FDThrLancamento      : string;
+        FDThrPrevisaoTermino : string;
+        FDThrInicio          : string;
+        FDThrFinalizada      : string;
+        FStatus              : integer;
+      public
+        property ID                  : Integer read FID                  write FID;
+        property Descricao           : string  read FDescricao           write FDescricao;
+        property IDUsuario           : integer read FIDUsuario           write FIDUsuario;
+        property DThrLancamento      : string  read FDThrLancamento      write FDThrLancamento;
+        property DThrPrevisaoTermino : string  read FDThrPrevisaoTermino write FDThrPrevisaoTermino;
+        property DThrInicio          : string  read FDThrInicio          write FDThrInicio;
+        property DThrFinalizada      : string  read FDThrFinalizada      write FDThrFinalizada;
+        property Status              : integer read FStatus              write FStatus;
+    end;
+
+    TEntityListaTarefas = class
+       private
+          FListaTarefas: TObjectList<TEntityTarefa>;
+          FEntityTarefa: TEntityTarefa;
+       public
+          property Listausuario : TObjectList<TEntityTarefa> read FListaTarefas  write FListaTarefas ;
+          property UsuarioEntity : TEntityTarefa  read FEntityTarefa  write FEntityTarefa ;
+
+          procedure AddUsuario(EntityUsuario : TEntityTarefa);
+
+          constructor Create;
+          destructor destroy;
+     end;
+
+implementation
+
+{ TEntityListaTarefas }
+
+procedure TEntityListaTarefas.AddUsuario(EntityUsuario: TEntityTarefa);
+begin
+
+end;
+
+constructor TEntityListaTarefas.Create;
+begin
+  FListaTarefas := TObjectList<TEntityTarefa>.Create();
+  FEntityTarefa := TEntityTarefa.Create;
+
+end;
+
+destructor TEntityListaTarefas.destroy;
+begin
+  FreeAndNil(FListaTarefas);
+  FreeAndNil(FEntityTarefa);
+end;
+
+end.

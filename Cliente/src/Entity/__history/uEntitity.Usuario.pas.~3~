@@ -1,0 +1,19 @@
+unit uEntitity.Usuario;
+
+interface
+
+   type
+   TEntityUsuario = class
+     private
+    FNome: string;
+    FLongin: string;
+    FPass: string;
+     public
+       property Nome   : string read FNome   write FNome;
+       property Longin : string read FLongin write FLongin;
+       property Pass   : string read FPass   write FPass;
+   end;
+
+implementation
+
+end.

@@ -1,0 +1,19 @@
+unit uModel.Usuario;
+
+interface
+     uses RESTRequest4D,
+          uEntitity.Usuario;
+
+  type
+    TModelUsuario = class
+      private
+        FUsuario: TEntityUsuario;
+
+      public
+        property Usuario : TEntityUsuario read FUsuario write FUsuario;
+
+    end;
+
+implementation
+
+end.

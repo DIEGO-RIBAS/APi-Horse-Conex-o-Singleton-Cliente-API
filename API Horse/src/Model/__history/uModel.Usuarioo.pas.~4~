@@ -1,0 +1,85 @@
+unit uModel.Usuarioo;
+
+interface
+
+  uses
+    System.JSON, System.SysUtils,
+    FireDAC.Comp.Client,
+
+    {MyUnits}
+    uConexaoSingleton,
+    uEntity.Tarefa,
+    uEntity.Atividade;
+
+   type
+
+    TModelUsuario = class
+      private
+        FQuery : TFDQuery;
+
+        FPass  : String;
+        FLogin : string;
+      public
+        property Login : string read FLogin write FLogin;
+        property Pass  : String read FPass  write FPass;
+
+        function ValidaUsuario : TJSONObject;
+
+        constructor Create;
+        destructor Destroy;
+    end;
+
+
+implementation
+
+{ TUsuario }
+
+
+{ TModelUsuario }
+
+constructor TModelUsuario.Create;
+begin
+  FQuery := TFDQuery.Create(nil);
+
+  {Pega conexão singleton}
+  FQuery.Connection := TInstanciaConexao.ObterInstancia.Conexao;
+end;
+
+destructor TModelUsuario.Destroy;
+begin
+  FreeAndNil(FQuery);
+end;
+
+function TModelUsuario.ValidaUsuario: TJSONObject;
+begin
+  Result := TJSONObject.Create;
+
+  with FQuery do
+  begin
+    with SQL do
+    begin
+      Clear;
+      Add('select ID from USUARIO where Login = "'+FLogin+'" pass = "'+FPass+'" ');
+      try
+        ExecSQL;
+      Except On E : Exception do
+        begin
+          { Se houver exceção armazenamos no Json para então exibir ao usuário cliente }
+          Result.AddPair('Erro','True');
+          Result.AddPair('Mensagem', e.Message);
+          raise;
+        end;
+      end;
+
+      if RowsAffected > 0 then
+      begin
+        Open();
+        Result.AddPair('Logou','OK');
+        Result.AddPair('Usuario', FieldByName('id').AsString);
+        close;
+      end;
+    end;
+  end;
+end;
+
+end.

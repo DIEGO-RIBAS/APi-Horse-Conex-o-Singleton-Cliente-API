@@ -1,0 +1,254 @@
+unit uModel.Tarefas;
+
+interface
+
+   uses System.JSON,System.SysUtils, DataSet.Serialize,
+        FireDAC.DApt,FireDAC.Stan.Option,FireDAC.Comp.Client,
+        FireDAC.Stan.Intf, FireDAC.Phys,
+        FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Def,
+        FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.VCLUI.Wait, FireDAC.Stan.Param,
+        FireDAC.DatS, FireDAC.DApt.Intf,  Data.DB, FireDAC.Comp.DataSet,
+
+        {MyUnits}
+        uConexaoSingleton,
+        uEntity.Tarefa,
+        uEntity.Atividade;
+  type
+
+  TModelTarefa = class
+    private
+      { Gosto de identar assim pra facilitar a leitura do código }
+      FQuery     : TFDQuery;
+      FIdUsuario : String;
+      FTarefa    : TEntityTarefa;
+      FAtividade : TEntityAtividade;
+
+    public
+      property IdUsuario : String           read FIdUsuario write FIdUsuario ;
+      property Tarefa    : TEntityTarefa    read FTarefa    write FTarefa;
+      property Atividade : TEntityAtividade read FAtividade write FAtividade;       
+
+      function ListaTarefas : TJSONObject;
+      function AddTarefa(ATarefa : TEntityTarefa) : TJSONObject;
+      function UpdateTarefa(ATarefa : TEntityTarefa) : TJSONObject;
+      function Deletetarefa(Id : Integer) : TJSONObject;      
+      function AddAtividade(AAtividade : TEntityAtividade): TJSONObject;
+
+      constructor Create;
+      destructor Destroy; 
+   end;
+
+implementation
+
+{ TTarefasModel }
+
+function TModelTarefa.AddAtividade(AAtividade: TEntityAtividade): TJSONObject;
+begin
+  Result := TJSONObject.Create;
+
+  with FQuery do
+  begin
+    with AAtividade do
+    begin
+      SQL.Clear;
+      SQL.Add('  INSERT INTO Tarefa_Atividade(IdTarefa, DescricaoAtividade, DThrInicio, DThrPrevisaoTermino, DThrTermino)  ');
+      SQL.Add('  VALUES ');
+      SQL.Add('  ('+ID.ToString+', "'+DescricaoAtividade+'", "'+DThrInicio+'", "'+DThrTermino+'")  ');
+    end;
+
+    try
+      ExecSQL;
+    except On E : Exception do
+      begin
+        with Result do
+        begin
+          AddPair('Erro','True');
+          AddPair('Mensagem',E.Message);
+          raise;
+        end;
+      end; 
+    end;
+
+    with Result do
+    begin
+      AddPair('Erro','False');
+      AddPair('Mensagem','Atividade armazenada com sucesso!');      
+    end;
+  end;
+end;
+
+function TModelTarefa.AddTarefa(ATarefa: TEntityTarefa): TJSONObject;
+begin
+  Result := TJSONObject.Create;
+  
+  with FQuery do
+  begin
+    with ATarefa do
+    begin
+      SQL.Clear;
+      SQL.Add('  INSERT INTO Tarefa(IdUsuario, Descricao, DThrLancamento, DThrPrevisaoTermino, Status)  ');
+      SQL.Add('  VALUES ');
+      SQL.Add('  ('+IDUsuario.ToString+', '''+Descricao+''', '''+DThrLancamento+''', '''+DThrPrevisaoTermino+''', '''+Status.ToString+''')  ');
+    end;
+
+    try
+      ExecSQL;
+    except On E : Exception do
+      begin
+        with Result do
+        begin
+          AddPair('Erro','True');
+          AddPair('Mensagem',E.Message);
+          raise;
+        end;
+      end; 
+    end;
+
+    with Result do
+    begin
+      AddPair('Erro','False');
+      AddPair('Mensagem','tarefa armazenada com sucesso!');      
+    end;
+  end;
+end;
+
+constructor TModelTarefa.Create;
+begin
+  FQuery  := TFDQuery.Create(nil);
+  {Pega conexão singleton}
+  FQuery.Connection := TInstanciaConexao.ObterInstancia.Conexao;
+
+  FTarefa    := TEntityTarefa.Create;
+  FAtividade := TEntityAtividade.Create;
+end;
+
+function TModelTarefa.Deletetarefa(Id : Integer): TJSONObject;
+begin
+  Result := TJSONObject.Create;
+  
+  with FQuery do
+  begin              
+   { ATIVIDADE - Uma tarefa pode ter varias atividades, então deve-se deletar primeiramente sua atividade e depois a tarefa }
+    SQL.Clear;
+    SQL.Add('DELETE FROM Tarefa_Atividade where idTarefa = '+ID.ToString+' ');
+
+    try
+      ExecSQL;
+    except On E: Exception do
+      begin
+        Result.AddPair('Erro','True');
+        Result.AddPair('Mensagem', ' Erro ao deletar ATIVIDADE. ' + #13+ 'Mensagem : '+ e.Message);
+        raise;
+      end; 
+    end;
+
+    { TAREFA  }
+    SQL.Clear;
+    SQL.Add('DELETE FROM Tarefas where id = '+ID.ToString+' ');
+
+    try
+      ExecSQL;
+    except On E: Exception do
+      begin
+        Result.AddPair('Erro','True');
+        Result.AddPair('Mensagem', ' Erro ao deletar TAREFA. ' + #13+ 'Mensagem : '+ e.Message);
+        raise;
+      end; 
+    end;
+  end;
+
+  Result.AddPair('Erro','False');
+  Result.AddPair('Mensagem', 'Tarefa excluída com sucesso !' );  
+end;
+
+destructor TModelTarefa.Destroy;
+begin
+  FreeAndNil(FQuery);
+  FreeAndNil(FTarefa);
+  FreeAndNil(FAtividade);
+end;
+
+function TModelTarefa.ListaTarefas: TJSONObject;
+begin
+  Result := TJSONObject.Create;
+
+  try
+    with FQuery do
+    begin
+      with SQL do
+      begin
+        Clear;
+        if StrToInt(FIdUsuario) > 0 then
+        begin
+          Add('  SELECT T.ID,T.idusuario,  T.Descricao, format(T.DThrLancamento, ''dd/MM/yyyy hh:mm'' )as DThrLancamento, ');
+          Add('   format(T.DThrPrevisaoTermino,''dd/MM/yyyy hh:mm'')as DThrPrevisaoTermino , format(T.DThrInicio, ');
+          Add('  ''dd/MM/yyyy hh:mm'')as DThrInicio , format(T.DThrFinalizada, ''dd/MM/yyyy hh:mm'') as DThrFinalizada,T.Status  ');
+          Add('  FROM dbo.TAREFA T  ');
+          Add('  INNER JOIN  Usuario U     ');
+          Add('  On U.id = T.IDusuario     ');
+          Add('  WHERE U.id = '+ FIdUsuario );
+          Add('  ORDER BY T.Descricao      ');
+        end
+          else
+          begin
+            Add('  SELECT id,idusuario, descricao, format(DThrLancamento, ''dd/MM/yyyy hh:mm'')as DThrLancamento, ');
+            Add('   format(DThrPrevisaoTermino,''dd/MM/yyyy hh:mm'')as DThrPrevisaoTermino, format(DThrInicio,''dd/MM/yyyy hh:mm'')as DThrInicio,');
+            Add('   format(DThrFinalizada,''dd/MM/yyyy hh:mm'')as DThrFinalizada,Status  ');
+            Add('  FROM TAREFA ');
+            Add('  order by descricao  ');
+          end;
+      end;
+
+      try
+        Open;
+      except On E: Exception do
+        begin
+          { Para cliente que consumiu APi saber que deu erro e então exibir a mensagem }
+          Result.AddPair('Erro','True');
+          Result.AddPair('Erro', e.Message);
+          raise;
+        end;
+      end;
+    end;
+
+    { retorna as tarefas relacionadas ao usuário }
+    Result.AddPair('Tarefas',FQuery.ToJSONArray()); { Poderia ter feito com generics e jsonArray porem asism, com dataSet.Serealize é mais rapido }
+  finally
+    FreeAndNil(FQuery);
+  end;
+end;
+
+function TModelTarefa.UpdateTarefa(ATarefa: TEntityTarefa): TJSONObject;
+begin
+  Result := TJSONObject.Create;
+
+  try
+    with FQuery do
+    begin
+      with SQL do
+      begin
+        Clear;
+        Add('  UPDATE TAREFAS set Status= "'+ATarefa.Status.ToString+'", DThrFinalizada= Now ');
+        Add('  WHERE id = '+ATarefa.ID.ToString+'  ');
+      end;
+
+      try
+        ExecSQL;
+      except On E: Exception do
+        begin
+          { Para cliente que consumiu APi saber que deu erro e então exibir a mensagem }
+          Result.AddPair('Erro','True');
+          Result.AddPair('Erro', e.Message);
+          raise;
+        end;
+      end;
+    end;
+
+    Result.AddPair('Erro','False');
+    Result.AddPair('Mensagem', 'Status atualizado com sucesso');
+  finally
+    FreeAndNil(FQuery);
+  end;
+end;
+
+end.

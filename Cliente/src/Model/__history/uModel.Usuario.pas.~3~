@@ -1,0 +1,16 @@
+unit uModel.Usuario;
+
+interface
+     uses RESTRequest4D
+
+  type
+    TModelUsuario = class
+      private
+
+      public
+
+    end;
+
+implementation
+
+end.

@@ -1,0 +1,15 @@
+unit uEntitity.Usuario;
+
+interface
+
+   type
+
+   TEntityUsuario = class
+     private
+
+     public
+   end;
+
+implementation
+
+end.

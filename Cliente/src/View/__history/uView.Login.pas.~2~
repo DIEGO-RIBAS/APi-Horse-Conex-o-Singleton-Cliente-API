@@ -1,0 +1,74 @@
+unit uView.Login;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.ComCtrls, Vcl.StdCtrls,
+  Vcl.Buttons, dxGDIPlusClasses;
+
+type
+  TfrmLogin = class(TForm)
+    StatusBar1: TStatusBar;
+    Panel1: TPanel;
+    Panel2: TPanel;
+    GroupBox1: TGroupBox;
+    btnEntrar: TSpeedButton;
+    BtnSair: TSpeedButton;
+    edtLogin: TEdit;
+    Label1: TLabel;
+    edtPassWord: TEdit;
+    Label2: TLabel;
+    Image1: TImage;
+    Label3: TLabel;
+    procedure BtnSairClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure btnEntrarClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmLogin: TfrmLogin;
+
+implementation
+
+{$R *.dfm}
+
+procedure TfrmLogin.btnEntrarClick(Sender: TObject);
+begin
+  if ((edtLogin.Text <> '') or (edtPassWord.Text <> '')) then
+  begin
+    if (edtLogin.Text <> '')then
+    begin
+      Application.MessageBox('Campo obrigatório não preenchido !','Atenção !',MB_ICONMASK);
+      edtLogin.SetFocus;
+      exit;
+    end;
+
+    if (edtPassWord.Text <> '')then
+    begin
+      Application.MessageBox('Campo obrigatório não preenchido !','Atenção !',MB_ICONMASK);
+      edtPassWord.SetFocus;
+      exit;
+    end;
+
+    // Validar
+  end;
+
+  Close;
+end;
+
+procedure TfrmLogin.BtnSairClick(Sender: TObject);
+begin
+  Application.Terminate;
+end;
+
+procedure TfrmLogin.FormShow(Sender: TObject);
+begin
+  edtLogin.SetFocus;
+end;
+
+end.

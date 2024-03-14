@@ -1,0 +1,22 @@
+unit uEntity.Atividade;
+
+interface
+  type
+
+    TEntityAtividade = class
+      private
+        FId                  : Integer;
+        FIDtarefa            : Integer;
+        FDescricaoAtividade  : string;
+        FDThrInicio          : string;
+        FDThrTermino         : string;
+      public
+        property ID                 : Integer read FId                   write FID;
+        property IDTarefa           : Integer read FIDtarefa             write FidTarefa;
+        property DescricaoAtividade : String  read FDescricaoAtividade   write FDescricaoAtividade;
+        property DThrInicio         : string  read FDThrInicio           write FDThrInicio;
+        property DThrTermino        : string  read FDThrTermino          write FDThrTermino;
+    end;
+implementation
+
+end.

@@ -1,0 +1,33 @@
+unit Controller.Tarefas;
+
+interface
+
+  uses
+  System.SysUtils,
+  Horse, Horse.jhonson,
+  {My Units}
+  uModel.Tarefas;
+
+  procedure Registry;
+  procedure ListarTarefas(Req: THorseRequest; Res:THorseResponse; Next : TProc );
+
+implementation
+
+procedure Registry;
+begin
+  THorse.Get('ListaTarefas/:id',ListarTarefas);
+end;
+
+procedure ListarTarefas(Req: THorseRequest; Res:THorseResponse; Next : TProc );
+var
+  Tarefas : TTarefasModel;
+begin
+  Tarefas := TTarefasModel.Create;
+  try
+    Res.Send(Tarefas.ListaTarefas).Status(200);
+  finally
+    FreeAndNil(Tarefas);
+  end;
+end;
+
+end.

@@ -1,0 +1,51 @@
+unit uModel.Usuario;
+
+interface
+     uses System.SysUtils, System.JSON,
+          RESTRequest4D,
+          uEntitity.Usuario;
+
+  type
+    TModelUsuario = class
+      private
+        FUsuario: TEntityUsuario;
+
+      public
+        property Usuario : TEntityUsuario read FUsuario write FUsuario;
+
+        function Gravar : TJSONObject;
+
+        constructor Create;
+        Destructor Destroy;
+    end;
+
+implementation
+
+{ TModelUsuario }
+
+constructor TModelUsuario.Create;
+begin
+  FUsuario := TEntityUsuario.Create;
+end;
+
+destructor TModelUsuario.Destroy;
+begin
+  FreeAndNil(FUsuario);
+end;
+
+function TModelUsuario.Gravar: TJSONObject;
+var
+  Resp : IResponse;
+begin
+  try
+      Resp := TRequest.New.BaseURL('localhost:9000/')
+                                  .Resource('GravarUsuario')
+                                  .Accept('application/json')
+                                  .AddBody('{"Nome":"'+FUsuario.Nome+'","Login":"'+FUsuario.Longin+'","Pass":"'+FUsuario.Pass+'"}')
+                                  .Post;
+  finally
+    Result := TJSONObject.ParseJSONValue(TEncoding.UTF8.GetBytes(Resp.Content),0) as TJSONObject;
+  end;
+end;
+
+end.

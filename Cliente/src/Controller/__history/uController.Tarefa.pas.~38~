@@ -1,0 +1,194 @@
+unit uController.Tarefa;
+
+interface
+
+  uses System.SysUtils,Vcl.Dialogs, System.JSON,    system.Classes,
+       uEntity.Tarefa,
+       uModel.Tarefa;
+
+  type
+    TControllerTarefa = class
+      private
+        FTarefa: TEntityTarefa;
+      public
+        property Tarefa : TEntityTarefa read FTarefa  write FTarefa ;
+
+        function Gravar        : Boolean;
+        function Deletar       : Boolean;
+        function Alterar       : Boolean;
+        function Listartarefas : TEntityListaTarefas;
+
+        constructor Create;
+        destructor Destroy;
+
+    end;
+
+implementation
+
+{ TControllerTarefa }
+
+function TControllerTarefa.Alterar: Boolean;
+var
+  ModelTarefa : TModelTarefa;
+  jObject     : TJSONObject;
+begin
+  ModelTarefa := TModelTarefa.Create;
+  try
+    with ModelTarefa do
+    begin
+      Tarefa.ID                  := FTarefa.ID.ToString;
+      Tarefa.Descricao           := FTarefa.Descricao;
+      Tarefa.IDUsuario           := FTarefa.IDUsuario;
+      Tarefa.DThrLancamento      := FTarefa.DThrLancamento;
+      Tarefa.DThrPrevisaoTermino := FTarefa.DThrPrevisaoTermino;
+      Tarefa.Status              := FTarefa.Status;
+    end;
+
+    jObject := ModelTarefa.Alterar;
+  finally
+    FreeAndNil(ModelTarefa);
+  end;
+
+  if jObject.GetValue('Erro').ToString = 'True' then
+  begin
+    ShowMessage('Ocorreu um erro.'+#13+#13+
+                'Erro: '+ jObject.GetValue('Mensagem').ToString);
+    Result := False;
+  end
+    else Result := True;
+end;
+
+constructor TControllerTarefa.Create;
+begin
+  FTarefa := TEntityTarefa.Create;
+end;
+
+function TControllerTarefa.Deletar: Boolean;
+var
+  ModelTarefa : TModelTarefa;
+  jObject     : TJSONObject;
+begin
+  ModelTarefa := TModelTarefa.Create;
+  try
+    with ModelTarefa do
+    begin
+      Tarefa.ID := FTarefa.ID;
+    end;
+
+    jObject := ModelTarefa.Deletar;
+  finally
+    FreeAndNil(ModelTarefa);
+  end;
+
+  if jObject.GetValue('Erro').ToString = 'True' then
+  begin
+    ShowMessage('Ocorreu um erro.'+#13+#13+
+                'Erro: '+ jObject.GetValue('Mensagem').ToString);
+    Result := False;
+  end
+    else Result := True;
+end;
+
+destructor TControllerTarefa.Destroy;
+begin
+  FreeAndNil(FTarefa);
+end;
+
+function TControllerTarefa.Gravar: Boolean;
+var
+  ModelTarefa : TModelTarefa;
+  jObject     : TJSONObject;
+
+  function ValidaCampos( ADThrLancamento, ADescricao : string ) : Boolean;
+  begin
+    Result := false;
+
+    try
+      StrToDateTime(ADThrLancamento);
+    except
+      ShowMessage('PREVISÃO DE TÉRMINO -  Data e hora inválida !');
+      Exit;
+    end;
+
+    if ADescricao = '' then
+    begin
+      ShowMessage('DESCRIÇÃO  não deve ser informada !');
+      Exit;
+    end;
+    Result := True;
+  end;
+
+begin
+  if not ValidaCampos(FTarefa.DThrPrevisaoTermino,FTarefa.Descricao) then
+    Exit;
+
+  ModelTarefa := TModelTarefa.Create;
+  try
+    with ModelTarefa do
+    begin
+      Tarefa.Descricao           := FTarefa.Descricao;
+      Tarefa.IDUsuario           := FTarefa.IDUsuario;
+      Tarefa.DThrLancamento      := FTarefa.DThrLancamento;
+      Tarefa.DThrPrevisaoTermino := FTarefa.DThrPrevisaoTermino;
+      Tarefa.Status              := FTarefa.Status;
+    end;
+
+    jObject := ModelTarefa.Gravar;
+  finally
+    FreeAndNil(ModelTarefa);
+  end;
+
+  if jObject.GetValue('Erro').ToString = 'True' then
+  begin
+    ShowMessage('Ocorreu um erro.'+#13+#13+
+                'Erro: '+ jObject.GetValue('Mensagem').ToString);
+    Result := False;
+  end
+    else Result := True;
+end;
+
+function TControllerTarefa.Listartarefas: TEntityListaTarefas;
+var
+  ModelTarefas  : TModelTarefa;
+  jObject       : TJSONObject;
+  jArray        : TJSONArray;
+  ListaTarefas  : TEntityListaTarefas;
+  i             : Integer;
+begin
+  ModelTarefas := TModelTarefa.Create;
+  ListaTarefas := TEntityListaTarefas.Create;
+
+  try
+    jObject := ModelTarefas.Listar;
+  finally
+    FreeAndNil(ModelTarefas);
+  end;
+
+  jArray := jObject.GetValue<TJSONArray>('Tarefas') as TJSONArray;
+  try
+    for I := 0 to Pred(jArray.Count) do
+      begin
+        jObject := jArray.Items[i] as TJSONObject;
+
+        with ListaTarefas do
+        begin
+          Tarefa.ID                  := jObject.GetValue<Integer>('id');
+          Tarefa.Descricao           := jObject.GetValue<string>('descricao');
+          Tarefa.IDUsuario           := jObject.GetValue<Integer>('idusuario');
+          Tarefa.DThrLancamento      := jObject.GetValue<string>('dthrlancamento');
+          Tarefa.DThrPrevisaoTermino := jObject.GetValue<string>('dthrprevisaotermino');
+          Tarefa.DThrInicio          := jObject.GetValue<string>('dthrinicio');
+          Tarefa.DThrFinalizada      := jObject.GetValue<string>('dthrfinalizada');
+          Tarefa.Status              := jObject.GetValue<Integer>('status');
+        end;
+
+        ListaTarefas.AddTarefa(ListaTarefas.Tarefa);
+      end;
+  finally
+    FreeAndNil(jArray);
+  end;
+
+  Result := ListaTarefas;
+end;
+
+end.

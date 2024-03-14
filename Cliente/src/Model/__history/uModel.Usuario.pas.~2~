@@ -1,0 +1,15 @@
+unit uModel.Usuario;
+
+interface
+
+  type
+    TModelUsuario = class
+      private
+
+      public
+
+    end;
+
+implementation
+
+end.

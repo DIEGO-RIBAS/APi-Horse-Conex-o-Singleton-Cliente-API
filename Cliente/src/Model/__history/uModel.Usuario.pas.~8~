@@ -1,0 +1,43 @@
+unit uModel.Usuario;
+
+interface
+     uses System.SysUtils, System.JSON,
+          RESTRequest4D,
+          uEntitity.Usuario;
+
+  type
+    TModelUsuario = class
+      private
+        FUsuario: TEntityUsuario;
+
+      public
+        property Usuario : TEntityUsuario read FUsuario write FUsuario;
+
+        function Gravar : TJSONObject;
+
+        constructor Create;
+        Destructor Destroy;
+    end;
+
+implementation
+
+{ TModelUsuario }
+
+constructor TModelUsuario.Create;
+begin
+  FUsuario := TEntityUsuario.Create;
+end;
+
+destructor TModelUsuario.Destroy;
+begin
+  FreeAndNil(FUsuario);
+end;
+
+function TModelUsuario.Gravar: TJSONObject;
+begin
+  Result := TJSONObject.Create;
+
+
+end;
+
+end.

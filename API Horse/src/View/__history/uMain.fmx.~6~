@@ -1,0 +1,23 @@
+object frmMain: TfrmMain
+  Left = 0
+  Top = 0
+  Caption = 'Servi'#231'o tarefas !'
+  ClientHeight = 210
+  ClientWidth = 273
+  Fill.Kind = Solid
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  DesignerMasterStyle = 0
+  object Label1: TLabel
+    Position.X = 16.000000000000000000
+    Position.Y = 32.000000000000000000
+    Size.Width = 233.000000000000000000
+    Size.Height = 81.000000000000000000
+    Size.PlatformDefault = False
+    Text = 
+      'Ap'#243's a cria'#231#227'o do executavel, transformar o memso em servi'#231'o'#13#10#13#10 +
+      'N'#227'o '#233' o que pedi o desafio, mas '#233' como sei fazer.'#13#10#13#10'Gostaria de' +
+      ' aprender de outra forma.'#13#10#13#10
+  end
+end

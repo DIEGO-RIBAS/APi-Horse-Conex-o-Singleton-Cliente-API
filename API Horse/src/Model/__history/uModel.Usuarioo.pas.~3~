@@ -1,0 +1,28 @@
+unit uModel.Usuarioo;
+
+interface
+
+  uses
+    FireDAC.Comp.Client;
+
+
+   type
+
+     TUsuario = class
+       private
+         FQuery : TFDQuery;
+       public
+         constructor Create;
+     end;
+
+
+implementation
+
+{ TUsuario }
+
+constructor TUsuario.Create;
+begin
+  FQuery := TFDQuery.Create(nil);
+end;
+
+end.

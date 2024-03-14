@@ -1,0 +1,15 @@
+program ClienteAPI;
+
+uses
+  Vcl.Forms,
+  uView.Main in 'View\uView.Main.pas' {frmMain},
+  uView.Login in 'View\uView.Login.pas' {frmLogin};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TfrmMain, frmMain);
+  Application.Run;
+end.

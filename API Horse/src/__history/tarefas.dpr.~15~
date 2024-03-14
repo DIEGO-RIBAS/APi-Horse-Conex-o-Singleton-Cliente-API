@@ -1,0 +1,22 @@
+program tarefas;
+
+uses
+  System.StartUpCopy,
+  FMX.Forms,
+  uMain in 'View\uMain.pas' {frmMain},
+  uController.Tarefas in 'Controller\uController.Tarefas.pas',
+  uModel.Tarefas in 'Model\uModel.Tarefas.pas',
+  uModel.Usuarioo in 'Model\uModel.Usuarioo.pas',
+  uConexaoSingleton in 'DAO\uConexaoSingleton.pas',
+  uEntity.Conexao in 'Entity\uEntity.Conexao.pas',
+  uController.Usuario in 'Controller\uController.Usuario.pas',
+  uEntity.Tarefa in 'Entity\uEntity.Tarefa.pas',
+  uEntity.Atividade in 'Entity\uEntity.Atividade.pas';
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.CreateForm(TfrmMain, frmMain);
+  Application.Run;
+end.

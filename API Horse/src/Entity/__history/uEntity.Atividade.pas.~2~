@@ -1,0 +1,26 @@
+unit uEntity.Atividade;
+
+interface
+  type
+
+    TEntityAtividade = class
+      private
+        { Eu gosto de identar assim, acho mais facil pra ler o código, mas caso precise que deixe sem espaço, pra mim tudo bem }
+        FId                  : Integer;
+        FIDtarefa            : Integer;
+        FDescricaoAtividade  : string;
+        FDThrInicio          : string;
+        FDThrTermino         : string;
+      public
+        property ID                 : Integer read FId                   write FID;
+        property IDTarefa           : Integer read FIDtarefa             write FidTarefa;
+        property DescricaoAtividade : String  read FDescricaoAtividade   write FDescricaoAtividade;
+        property DThrLancamento      : string  read FDThrLancamento       write FDThrLancamento;
+        property DThrPrevisaoTermino : string  read FDThrPrevisaoTermino  write FDThrPrevisaoTermino;
+        property DThrInicio          : string  read FDThrInicio           write FDThrInicio;
+        property DThrFinalizada      : string  read FDThrFinalizada       write FDThrFinalizada;
+        property Status              : integer read FStatus               write FStatus;
+    end;
+implementation
+
+end.

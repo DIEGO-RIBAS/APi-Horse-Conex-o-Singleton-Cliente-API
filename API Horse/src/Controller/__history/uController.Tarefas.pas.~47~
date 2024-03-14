@@ -1,0 +1,194 @@
+unit uController.Tarefas;
+
+interface
+
+  uses
+  System.SysUtils, System.JSON,    system.Classes,
+  Horse, Horse.jhonson,
+
+  {My Units}
+  uModel.Tarefas;
+
+  procedure Registry;
+  procedure ListarTarefas(Req: THorseRequest; Res:THorseResponse; Next : TProc );
+  procedure AddTarefas(Req: THorseRequest; Res:THorseResponse; Next : TProc );
+  procedure UpdateTarefa(Req: THorseRequest; Res:THorseResponse; Next : TProc );
+  procedure DeleteTarefa(Req: THorseRequest; Res:THorseResponse; Next : TProc );
+  procedure AddAtividade(Req: THorseRequest; Res:THorseResponse; Next : TProc );
+  procedure GetTotalTarefas(Req: THorseRequest; Res:THorseResponse; Next : TProc );
+
+implementation
+
+procedure Registry;
+begin
+  { No cliente que consome a APi ao logar pegamos o ID do memso e então listamos apenas as tarefas relacionadas a ele. }
+  THorse.Get('ListaTarefas/:idUsuario',ListarTarefas);
+
+  THorse.Get('TotalTarefas',GetTotalTarefas);
+
+  THorse.Get('TotaltarefasUltimosSeteDias',GetTotalTarefas);
+
+  { POST - Insere uma tarefa  }
+  THorse.Post('GravarTarefa/',AddTarefas);
+
+  { UPDATE - Atualiza o status }
+  THorse.Put('AtualizaTarefa/',UpdateTarefa);
+
+  { DELETE - Deleta uma tarefa e suas atividades }
+  THorse.Delete('DeletarTarefa/:idTarefa',DeleteTarefa);
+
+  ////////////////////////////////////////////////////////////////////////
+  //                           ATIVIDADE                                //
+  // Toda tarefa pode ter varias atividades até que seja finalizada.    //
+  // Sendo assim, devemos ter a possibilidade de lançar toda a tividade //
+  // realizada até que o término da tarefa.                             //
+  // Desta forma conseguimos acompanhar todo o processo realizado       //
+  ////////////////////////////////////////////////////////////////////////
+  THorse.Post('GravarAtividadeTarefa/:idTarefa',AddAtividade);
+end;
+
+procedure GetTotalTarefas(Req: THorseRequest; Res:THorseResponse; Next : TProc );
+var
+  Tarefas : TModelTarefa;
+begin
+  Tarefas := TModelTarefa.Create;
+
+  try
+    Res.Send(Tarefas.GetTotalTarefas).Status(200);
+  finally
+    FreeAndNil(Tarefas);
+  end;
+end;
+
+procedure ListarTarefas(Req: THorseRequest; Res:THorseResponse; Next : TProc );
+var
+  Tarefas : TModelTarefa;
+begin
+  Tarefas := TModelTarefa.Create;
+  Tarefas.IdUsuario := Req.Params['idUsuario'];
+
+  try
+    { Lista tarefas do usuário }
+    Res.Send(Tarefas.ListaTarefas).Status(200);
+  finally
+    FreeAndNil(Tarefas);
+  end;
+end;
+
+procedure AddTarefas(Req: THorseRequest; Res:THorseResponse; Next : TProc );
+var
+  TarefasModel : TModelTarefa;
+  JsonTarefa   : TJSONObject;
+
+  str : TStringList;
+begin
+  TarefasModel := TModelTarefa.Create;
+  try
+    { pega o Json que esta vindo do cliente que esta consumindo a api }
+    JsonTarefa := TJSONObject.ParseJSONValue(TEncoding.UTF8.GetBytes(Req.Body),0) as TJSONObject;
+
+    str := TStringList.Create;
+    try
+      str.Add(JsonTarefa.ToString);
+     // str.SaveToFile('C:\Teste.txt');
+    finally
+      FreeAndNil(str);
+    end;
+
+
+    with TarefasModel do
+    begin
+      IdUsuario                  := JsonTarefa.GetValue<string>('idUsuario');
+      Tarefa.Descricao           := JsonTarefa.GetValue<string>('Descricao');
+      Tarefa.DThrLancamento      := JsonTarefa.GetValue<string>('DThrLancamento');
+      Tarefa.DThrPrevisaoTermino := JsonTarefa.GetValue<string>('DThrPrevisaoTermino');
+{      Tarefa.DThrInicio          := JsonTarefa.GetValue<string>('DThrInicio');
+      Tarefa.DThrFinalizada      := JsonTarefa.GetValue<string>('DThrFinalizada');}
+    end;
+
+    { Gravamos a tarefa e exibe retorno de sucesso ou não }
+    Res.Send(TarefasModel.AddTarefa(TarefasModel.Tarefa)).Status(200);
+  finally
+    FreeAndNil(TarefasModel);
+    FreeAndNil(JsonTarefa);
+  end;
+end;
+
+procedure UpdateTarefa(Req: THorseRequest; Res:THorseResponse; Next : TProc );
+var
+  ModelTarefa : TModelTarefa;
+  JsonTarefa  : TJSONObject;
+begin
+  ModelTarefa := TModelTarefa.Create;
+  try
+    { pega o Json que esta vindo do cliente que esta consumindo a api }
+    JsonTarefa := TJSONObject.ParseJSONValue(TEncoding.UTF8.GetBytes(Req.Body),0) as TJSONObject;
+
+    with ModelTarefa do
+    begin
+      Tarefa.ID                  := JsonTarefa.GetValue<Integer>('Id');
+      IdUsuario                  := JsonTarefa.GetValue<string>('idUsuario');
+      Tarefa.Descricao           := JsonTarefa.GetValue<string>('Descricao');
+      Tarefa.DThrLancamento      := JsonTarefa.GetValue<string>('DThrLancamento');
+      Tarefa.DThrPrevisaoTermino := JsonTarefa.GetValue<string>('DThrPrevisaoTermino');
+ //     Tarefa.DThrInicio          := JsonTarefa.GetValue<string>('DThrInicio');
+ //     Tarefa.DThrFinalizada      := JsonTarefa.GetValue<string>('DThrFinalizada');
+      Tarefa.Status              := 2;
+    end;
+
+    { Gravamos a tarefa e exibe retorno de sucesso ou não }
+    Res.Send(ModelTarefa.UpdateTarefa(ModelTarefa.Tarefa)).Status(200);
+  finally
+    FreeAndNil(ModelTarefa);
+    FreeAndNil(JsonTarefa);
+  end;
+end;
+
+procedure DeleteTarefa(Req: THorseRequest; Res:THorseResponse; Next : TProc );
+var
+  ModelTarefa : TModelTarefa;
+  JsonTarefa  : TJSONObject;
+  idTarefa    : Integer;
+begin
+  ModelTarefa := TModelTarefa.Create;
+  try
+    { pega o Json que esta vindo do cliente que esta consumindo a api }
+    JsonTarefa := TJSONObject.ParseJSONValue(TEncoding.UTF8.GetBytes(Req.Body),0) as TJSONObject;
+    idTarefa   := Req.Params['idTarefa'].ToInteger;
+
+    { Exclui a tarefa e sua atividades }
+    Res.Send(ModelTarefa.DeleteTarefa(idTarefa)).Status(200);
+  finally
+    FreeAndNil(ModelTarefa);
+    FreeAndNil(JsonTarefa);
+  end;
+end;
+
+procedure AddAtividade(Req: THorseRequest; Res:THorseResponse; Next : TProc );
+var
+  ModelTarefa   : TModelTarefa;
+  JsonAtividade : TJSONObject;
+  idTarefa      : Integer;
+begin
+  ModelTarefa := TModelTarefa.Create;
+  try
+    JsonAtividade := TJSONObject.ParseJSONValue(TEncoding.UTF8.GetBytes(Req.Body),0) as TJSONObject;
+    idTarefa      := Req.Params['id'].ToInteger;
+
+    with ModelTarefa do
+    begin
+      Atividade.IDTarefa           := idTarefa;
+      Atividade.DescricaoAtividade := JsonAtividade.GetValue<string>('DescrAtividade');
+      Atividade.DThrInicio         := JsonAtividade.GetValue<string>('DThrInicio');
+      Atividade.DThrTermino        := JsonAtividade.GetValue<string>('DThrTermino');
+    end;
+
+    { Gravamos a tarefa e exibe retorno de sucesso ou não }
+    Res.Send(ModelTarefa.AddAtividade(ModelTarefa.Atividade)).Status(200);
+  finally
+    FreeAndNil(ModelTarefa);
+    FreeAndNil(JsonAtividade);
+  end;
+end;
+
+end.

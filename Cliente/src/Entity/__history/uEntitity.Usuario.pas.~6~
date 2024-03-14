@@ -1,0 +1,64 @@
+unit uEntitity.Usuario;
+
+interface
+
+   uses System.Generics.Collections,
+        System.SysUtils;
+
+   type
+   TEntityUsuario = class
+     private
+        FID     : Integer;
+        FNome   : string;
+        FLongin : string;
+        FPass   : string;
+     public
+        property ID     : integer read FID     write FID;
+        property Nome   : string  read FNome   write FNome;
+        property Longin : string  read FLongin write FLongin;
+        property Pass   : string  read FPass   write FPass;
+   end;
+
+   TEntityListaUsuarios = class
+       private
+          FListaUsuarios: TObjectList<TEntityUsuario>;
+          FEntityUsuario: TEntityUsuario;
+       public
+          property Listausuario : TObjectList<TEntityUsuario> read FListaUsuarios  write FListaUsuarios ;
+          property UsuarioEntity : TEntityUsuario  read FEntityUsuario  write FEntityUsuario ;
+
+          procedure AddUsuario(EntityUsuario : TEntityUsuario);
+
+          constructor Create;
+          destructor destroy;
+     end;
+
+implementation
+
+{ TEntityListaUsuarios }
+
+procedure TEntityListaUsuarios.AddUsuario(EntityUsuario: TEntityUsuario);
+var
+  i : Integer;
+begin
+  FListaUsuarios.Add(TEntityUsuario.Create);
+  I := FListaUsuarios.Count -1;
+  FListaUsuarios[I].FID          := EntityUsuario.FID;
+  FListaUsuarios[I].FNome        := EntityUsuario.FNome;
+  FListaUsuarios[I].FLongin      := EntityUsuario.FLongin;
+  FListaUsuarios[I].FPass        := Produto.FPass;
+end;
+
+constructor TEntityListaUsuarios.Create;
+begin
+  FListaUsuarios := TObjectList<TEntityUsuario>.Create;
+  FEntityUsuario := TEntityUsuario.Create;
+end;
+
+destructor TEntityListaUsuarios.destroy;
+begin
+  FreeAndNil(FListaUsuarios);
+  FreeAndNil(FEntityUsuario);
+end;
+
+end.

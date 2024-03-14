@@ -1,0 +1,20 @@
+program ClienteAPI;
+
+uses
+  Vcl.Forms,
+  uView.Main in 'View\uView.Main.pas' {frmMain},
+  uView.Login in 'View\uView.Login.pas' {frmLogin},
+  uController.Login in 'Controller\uController.Login.pas',
+  uModel.Login in 'Model\uModel.Login.pas',
+  uEntitity.Usuario in 'Entity\uEntitity.Usuario.pas',
+  uController.Usuario in 'Controller\uController.Usuario.pas',
+  uModel.Usuario in 'Model\uModel.Usuario.pas';
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TfrmMain, frmMain);
+  Application.Run;
+end.

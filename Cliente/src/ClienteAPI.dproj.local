@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2024/03/13 09:29:47.000.101,=C:\Users\Diego\OneDrive\Documentos\Embarcadero\Studio\Projects\Unit3.pas</Transaction>
+    <Transaction>2024/03/13 09:30:05.000.111,C:\Users\Diego\OneDrive\Documentos\Embarcadero\Studio\Projects\Unit3.dfm=D:\Delphi\Conrtole de tarefas - API Horse + Cliente\Cliente\src\View\uMain.dfm</Transaction>
+    <Transaction>2024/03/13 09:30:05.000.111,C:\Users\Diego\OneDrive\Documentos\Embarcadero\Studio\Projects\Unit3.pas=D:\Delphi\Conrtole de tarefas - API Horse + Cliente\Cliente\src\View\uMain.pas</Transaction>
+    <Transaction>2024/03/13 09:30:19.000.532,C:\Users\Diego\OneDrive\Documentos\Embarcadero\Studio\Projects\Project3.dproj=D:\Delphi\Conrtole de tarefas - API Horse + Cliente\Cliente\src\ClienteAPI.dproj</Transaction>
+    <Transaction>2024/03/13 09:33:25.000.142,=D:\Delphi\Conrtole de tarefas - API Horse + Cliente\Cliente\src\Unit1.pas</Transaction>
+    <Transaction>2024/03/13 09:33:35.000.782,D:\Delphi\Conrtole de tarefas - API Horse + Cliente\Cliente\src\Unit1.dfm=D:\Delphi\Conrtole de tarefas - API Horse + Cliente\Cliente\src\View\uLogin.dfm</Transaction>
+    <Transaction>2024/03/13 09:33:35.000.782,D:\Delphi\Conrtole de tarefas - API Horse + Cliente\Cliente\src\Unit1.pas=D:\Delphi\Conrtole de tarefas - API Horse + Cliente\Cliente\src\View\uLogin.pas</Transaction>
+    <Transaction>2024/03/13 10:09:16.000.843,D:\Delphi\Conrtole de tarefas - API Horse + Cliente\Cliente\src\View\uLogin.dfm=D:\Delphi\Conrtole de tarefas - API Horse + Cliente\Cliente\src\View\uView.Login.dfm</Transaction>
+    <Transaction>2024/03/13 10:09:16.000.843,D:\Delphi\Conrtole de tarefas - API Horse + Cliente\Cliente\src\View\uLogin.pas=D:\Delphi\Conrtole de tarefas - API Horse + Cliente\Cliente\src\View\uView.Login.pas</Transaction>
+    <Transaction>2024/03/13 10:09:28.000.380,D:\Delphi\Conrtole de tarefas - API Horse + Cliente\Cliente\src\View\uMain.dfm=D:\Delphi\Conrtole de tarefas - API Horse + Cliente\Cliente\src\View\uView.Main.dfm</Transaction>
+    <Transaction>2024/03/13 10:09:28.000.380,D:\Delphi\Conrtole de tarefas - API Horse + Cliente\Cliente\src\View\uMain.pas=D:\Delphi\Conrtole de tarefas - API Horse + Cliente\Cliente\src\View\uView.Main.pas</Transaction>
+    <Transaction>2024/03/13 10:32:44.000.707,=D:\Delphi\Conrtole de tarefas - API Horse + Cliente\Cliente\src\Unit1.pas</Transaction>
+    <Transaction>2024/03/13 10:33:25.000.521,D:\Delphi\Conrtole de tarefas - API Horse + Cliente\Cliente\src\Unit1.pas=D:\Delphi\Conrtole de tarefas - API Horse + Cliente\Cliente\src\Controller\uController.Login.pas</Transaction>
+    <Transaction>2024/03/13 10:36:58.000.063,=D:\Delphi\Conrtole de tarefas - API Horse + Cliente\Cliente\src\Unit1.pas</Transaction>
+    <Transaction>2024/03/13 10:37:13.000.606,D:\Delphi\Conrtole de tarefas - API Horse + Cliente\Cliente\src\Unit1.pas=D:\Delphi\Conrtole de tarefas - API Horse + Cliente\Cliente\src\Model\uModel.Login.pas</Transaction>
+    <Transaction>2024/03/13 16:41:14.000.320,=D:\Delphi\Conrtole de tarefas - API Horse + Cliente\Cliente\src\Unit1.pas</Transaction>
+    <Transaction>2024/03/13 16:41:40.000.745,D:\Delphi\Conrtole de tarefas - API Horse + Cliente\Cliente\src\Unit1.pas=D:\Delphi\Conrtole de tarefas - API Horse + Cliente\Cliente\src\Entity\uEntitity.Usuario.pas</Transaction>
+    <Transaction>2024/03/13 16:45:52.000.878,=D:\Delphi\Conrtole de tarefas - API Horse + Cliente\Cliente\src\Unit1.pas</Transaction>
+    <Transaction>2024/03/13 16:46:13.000.205,D:\Delphi\Conrtole de tarefas - API Horse + Cliente\Cliente\src\Unit1.pas=D:\Delphi\Conrtole de tarefas - API Horse + Cliente\Cliente\src\Controller\uController.Usuario.pas</Transaction>
+    <Transaction>2024/03/13 17:13:03.000.433,=D:\Delphi\Conrtole de tarefas - API Horse + Cliente\Cliente\src\Unit1.pas</Transaction>
+    <Transaction>2024/03/13 17:13:13.000.792,D:\Delphi\Conrtole de tarefas - API Horse + Cliente\Cliente\src\Unit1.pas=D:\Delphi\Conrtole de tarefas - API Horse + Cliente\Cliente\src\Model\uModel.Usuario.pas</Transaction>
+    <Transaction>2024/03/14 08:17:48.157,=D:\Delphi\Conrtole de tarefas - API Horse + Cliente\Cliente\src\Unit1.pas</Transaction>
+    <Transaction>2024/03/14 08:18:05.118,D:\Delphi\Conrtole de tarefas - API Horse + Cliente\Cliente\src\Entity\uEntity.Tarefa.pas=D:\Delphi\Conrtole de tarefas - API Horse + Cliente\Cliente\src\Unit1.pas</Transaction>
+    <Transaction>2024/03/14 09:20:58.275,=D:\Delphi\Conrtole de tarefas - API Horse + Cliente\Cliente\src\Unit1.pas</Transaction>
+    <Transaction>2024/03/14 09:21:12.321,D:\Delphi\Conrtole de tarefas - API Horse + Cliente\Cliente\src\Controller\uController.Tarefa.pas=D:\Delphi\Conrtole de tarefas - API Horse + Cliente\Cliente\src\Unit1.pas</Transaction>
+    <Transaction>2024/03/14 09:45:29.441,=D:\Delphi\Conrtole de tarefas - API Horse + Cliente\Cliente\src\Unit1.pas</Transaction>
+    <Transaction>2024/03/14 09:45:40.098,D:\Delphi\Conrtole de tarefas - API Horse + Cliente\Cliente\src\Model\uModel.Tarefa.pas=D:\Delphi\Conrtole de tarefas - API Horse + Cliente\Cliente\src\Unit1.pas</Transaction>
+  </Transactions>
+</BorlandProject>

@@ -1,0 +1,95 @@
+unit uController.Login;
+
+interface
+
+  uses System.SysUtils, System.JSON, Vcl.Dialogs,  System.Variants, System.Classes, Vcl.Graphics,
+            Vcl.Controls, Vcl.Forms,
+       uModel.Login;
+
+  type
+
+    TControllerLogin = class
+      private
+        FLogin: string;
+        FPass: string;
+
+      public
+        property  Longin : string read FLogin write FLogin;
+        property  Pass   : string read FPass  write FPass;
+
+        function ValidaUsuario : Integer;
+
+        constructor Create;
+        destructor Destroy;
+    end;
+
+implementation
+
+{ TControllerLogin }
+
+constructor TControllerLogin.Create;
+begin
+
+end;
+
+destructor TControllerLogin.Destroy;
+begin
+
+end;
+
+function TControllerLogin.ValidaUsuario: Integer;
+var
+  ModelLogin    : TModelLogin;
+  JsonReturnAPI : TJSONObject;
+  APIComErro    : Boolean;
+  MensagemErro  : string;
+begin
+  if FLogin = '' then
+  begin
+    ShowMessage('LOGIN deve ser informado !');
+    Exit;
+  end;
+
+  if FPass = '' then
+  begin
+    ShowMessage('SENHA deve ser informada !');
+    Exit;
+  end;
+
+  { Result = id do usuário }
+  Result := 0;
+
+  ModelLogin := TModelLogin.create;
+  try
+    ModelLogin.Longin := FLogin;
+    ModelLogin.Pass   := FPass;
+
+    try
+      JsonReturnAPI := ModelLogin.Validar; {=> Pega o Json retornado pela api }
+      APIComErro    := StrToBool(JsonReturnAPI.GetValue('Erro').Value);
+
+      { Retorno de erro na api }
+      if APIComErro then
+      begin
+        MensagemErro := JsonReturnAPI.GetValue('Erro').Value;
+        ShowMessage(PChar(MensagemErro));
+      end
+        else
+        begin
+          Result := StrToInt(JsonReturnAPI.GetValue('Usuario').Value);
+
+          { Se result = 0 então não encontreou usuário com este login e senha }
+          if Result = 0 then
+          begin
+            ShowMessage('Usuário não localizado !');
+          end;
+        end;
+    finally
+      FreeAndNil(JsonReturnAPI);
+    end;
+  finally
+    FreeAndNil(ModelLogin);
+  end;
+end;
+
+end.

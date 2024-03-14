@@ -1,0 +1,61 @@
+unit uModel.Usuarioo;
+
+interface
+
+  uses
+    System.JSON, System.SysUtils,
+    FireDAC.Comp.Client,
+
+    {MyUnits}
+    uConexaoSingleton,
+    uEntity.Tarefa,
+    uEntity.Atividade;
+
+   type
+
+    TModelUsuario = class
+      private
+        FQuery : TFDQuery;
+
+        FPass  : String;
+        FLogin : string;
+      public
+        property Login : string read FLogin write FLogin;
+        property Pass  : String read FPass  write FPass;
+
+        function ValidaUsuario : TJSONObject;
+
+        constructor Create;
+        destructor Destroy;
+    end;
+
+
+implementation
+
+{ TUsuario }
+
+
+{ TModelUsuario }
+
+constructor TModelUsuario.Create;
+begin
+end;
+
+destructor TModelUsuario.Destroy;
+begin
+//  FreeAndNil(FQuery);
+end;
+
+function TModelUsuario.ValidaUsuario: TJSONObject;
+begin
+  Result := TJSONObject.Create;
+
+
+//  FQuery := TFDQuery.Create(nil);
+
+  {Pega conexão singleton}
+//  FQuery.Connection := TInstanciaConexao.ObterInstancia.Conexao;
+
+end;
+
+end.

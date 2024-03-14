@@ -1,0 +1,19 @@
+unit uEntity.Tarefa;
+
+interface
+
+  type
+    TEntityTarefa = class
+      private
+        FID: Integer;
+        FIDUsuario: integer;
+
+      public
+        property ID        : Integer read FID write FID;
+        property IDUsuario : integer read FIDUsuario write FIDUsuario;
+
+    end;
+
+implementation
+
+end.

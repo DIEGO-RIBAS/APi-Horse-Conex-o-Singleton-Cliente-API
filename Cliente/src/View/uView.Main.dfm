@@ -189,7 +189,7 @@ object frmMain: TfrmMain
     Top = 41
     Width = 742
     Height = 340
-    ActivePage = TabSheet2
+    ActivePage = TbsTarefas
     Align = alClient
     TabOrder = 3
     object TbsTarefas: TTabSheet

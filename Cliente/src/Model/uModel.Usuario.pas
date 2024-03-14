@@ -42,6 +42,7 @@ begin
       Resp := TRequest.New.BaseURL('localhost:9000/')
                                   .Resource('GravarUsuario')
                                   .Accept('application/json')
+                                  .BasicAuthentication('DiegoRibas','2222ribas')
                                   .AddBody('{"Nome":"'+FEntityUsuario.Nome+'","Login":"'+FEntityUsuario.Longin+'","Pass":"'+FEntityUsuario.Pass+'"}')
                                   .Post;
   finally
@@ -57,6 +58,7 @@ begin
       Resp := TRequest.New.BaseURL('localhost:9000/')
                                   .Resource('ListarUsuario')
                                   .Accept('application/json')
+                                  .BasicAuthentication('DiegoRibas','2222ribas')
                                   .Get;
   finally
     Result := TJSONObject.ParseJSONValue(TEncoding.UTF8.GetBytes(Resp.Content),0) as TJSONObject;

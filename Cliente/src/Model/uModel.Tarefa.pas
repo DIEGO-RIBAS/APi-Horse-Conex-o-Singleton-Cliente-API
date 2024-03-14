@@ -47,6 +47,7 @@ begin
     Resp := TRequest.New.BaseURL('localhost:9000/')
                                 .Resource('AtualizaTarefa')
                                 .Accept('application/json')
+                                .BasicAuthentication('DiegoRibas','2222ribas')
                                 .AddBody(Result.ToString)
                                 .Put;
   finally
@@ -67,6 +68,7 @@ begin
     Resp := TRequest.New.BaseURL('localhost:9000/')
                                 .Resource('DeletarTarefa/'+FTarefa.ID.ToString)
                                 .Accept('application/json')
+                                .BasicAuthentication('DiegoRibas','2222ribas')
                                 .Delete;
   finally
     Result := TJSONObject.ParseJSONValue(TEncoding.UTF8.GetBytes(Resp.Content),0) as TJSONObject;
@@ -86,6 +88,7 @@ begin
     Resp := TRequest.New.BaseURL('localhost:9000/')
                                 .Resource('TotaltarefasUltimosSeteDias')
                                 .Accept('application/json')
+                                .BasicAuthentication('DiegoRibas','2222ribas')
                                 .Get;
   finally
     Result := TJSONObject.ParseJSONValue(TEncoding.UTF8.GetBytes(Resp.Content),0) as TJSONObject;
@@ -101,6 +104,7 @@ begin
     Resp := TRequest.New.BaseURL('localhost:9000/')
                                 .Resource('TotalTarefas')
                                 .Accept('application/json')
+                                .BasicAuthentication('DiegoRibas','2222ribas')
                                 .Get;
   finally
     Result := TJSONObject.ParseJSONValue(TEncoding.UTF8.GetBytes(Resp.Content),0) as TJSONObject;
@@ -123,6 +127,7 @@ begin
                                 .Resource('GravarTarefa')
                                 .Accept('application/json')
                                 .AddBody(Result.ToString)
+                                .BasicAuthentication('DiegoRibas','2222ribas')
                                 .Post;
   finally
     Result := TJSONObject.ParseJSONValue(TEncoding.UTF8.GetBytes(Resp.Content),0) as TJSONObject;
@@ -137,6 +142,7 @@ begin
     Resp := TRequest.New.BaseURL('localhost:9000/')
                                 .Resource('ListaTarefas/'+ FTarefa.IDUsuario.ToString)
                                 .Accept('application/json')
+                                .BasicAuthentication('DiegoRibas','2222ribas')
                                 .Get;
   finally
     Result := TJSONObject.ParseJSONValue(TEncoding.UTF8.GetBytes(Resp.Content),0) as TJSONObject;

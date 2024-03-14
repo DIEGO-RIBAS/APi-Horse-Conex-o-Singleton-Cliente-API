@@ -204,6 +204,7 @@ var
   i                  : Integer;
 begin
   lblMsg.Caption   := 'Atualizando lista de tarefas';
+  lblMsg.Repaint;
   TimerMsg.Enabled := True;
 
   ControllerTarefa := TControllerTarefa.Create;

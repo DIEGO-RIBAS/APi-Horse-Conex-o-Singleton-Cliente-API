@@ -49,6 +49,7 @@ begin
                                   .Resource('Validar')
                                   .Accept('application/json')
                                   .AddBody('{"Login":"'+FLongin+'","Pass":"'+FPass+'"}')
+                                  .BasicAuthentication('DiegoRibas','2222ribas')
                                   .Post;
   finally
     Result := TJSONObject.ParseJSONValue(TEncoding.UTF8.GetBytes(Resp.Content),0) as TJSONObject;

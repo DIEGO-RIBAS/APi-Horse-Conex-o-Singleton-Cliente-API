@@ -42,11 +42,11 @@ begin
   THorse.Use(Cors);
 
   { Basic Autentication }
-  {  THorse.Use(HorseBasicAuthentication(
+    THorse.Use(HorseBasicAuthentication(
     function(const AUsername, APassword: string): Boolean
     begin
       Result := AUsername.Equals('DiegoRibas') and APassword.Equals('2222ribas');
-    end));}
+    end));
 
   uController.Usuario.Registry; { =>  Registro das rotas de usuário  }
   uController.Tarefas.Registry; { =>   Registro de rotas tarefas      }
